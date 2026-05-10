@@ -92,7 +92,7 @@ type VendorRatingsResponse = {
   message?: string
 }
 
-function formatCurrency(value: number | string): string {
+function formatCurrency(value?: number | string): string {
   return `Rp ${Number(value || 0).toLocaleString('id-ID')}`
 }
 
