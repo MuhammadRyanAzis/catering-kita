@@ -12,9 +12,23 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CustomersModule } from './customers/customers.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 
 @Module({
-  imports: [PrismaModule, BcryptModule, MenusModule, CustomersModule, VendorsModule, CategoriesModule, OrdersModule, PaymentsModule, ReviewsModule, AuthModule,
+  imports: [
+    PrismaModule,
+    BcryptModule,
+    MenusModule,
+    CustomersModule,
+    VendorsModule,
+    CategoriesModule,
+    OrdersModule,
+    PaymentsModule,
+    ReviewsModule,
+    AuthModule,
+    SubscriptionsModule,
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env`,

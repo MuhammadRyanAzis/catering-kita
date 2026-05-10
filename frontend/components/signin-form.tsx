@@ -7,10 +7,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { storeCookies } from "@/helper/cookies"
 
 export function SigninForm({ onSwitchToSignin }: { onSwitchToSignin?: () => void }) {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string>('')
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,13 +24,57 @@ export function SigninForm({ onSwitchToSignin }: { onSwitchToSignin?: () => void
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsLoading(false)
+    setError('')
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`
+    
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        // Store token and user in cookies (httpOnly, server-accessible)
+        await storeCookies('token', data.data.access_token)
+        await storeCookies('user', JSON.stringify(data.data.user))
+        // Also keep in localStorage for client-side access
+        localStorage.setItem('token', data.data.access_token)
+        localStorage.setItem('user', JSON.stringify(data.data.user))
+
+        // Redirect based on role
+        if (data.data.user.role === 'CUSTOMER') {
+          router.push('/customer/dashboard')
+        } else if (data.data.user.role === 'VENDOR') {
+          router.push('/vendor/dashboard')
+        } else {
+          router.push('/dashboard')
+        }
+      } else {
+        setError(data.message || 'Email atau password salah')
+      }
+    } catch (err) {
+      setError('Terjadi kesalahan, silakan coba lagi')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3 lg:space-y-5">
+      {error && (
+        <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+          {error}
+        </div>
+      )}
+      
       <div className="space-y-1.5 lg:space-y-2">
         <Label htmlFor="email" className="text-sm lg:text-base font-medium">
           Email

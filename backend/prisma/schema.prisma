@@ -45,6 +45,7 @@ model customers {
   reviews    reviews[]
   vendor_ratings vendor_ratings[]
   menu_ratings menu_ratings[]
+  subscriptions subscriptions[]
 
   @@index([phone])
 }
@@ -60,6 +61,8 @@ model vendors {
   phone       String    @db.VarChar(20)
   image_url   String?   @db.VarChar(255)
   banner_url  String?   @db.VarChar(255)
+  subscription_price_7  Decimal? @db.Decimal(10, 2)
+  subscription_price_30 Decimal? @db.Decimal(10, 2)
   is_active   Boolean   @default(true)
   created_at  DateTime  @default(now()) @db.Timestamp(0)
   updated_at  DateTime  @updatedAt @db.Timestamp(0)
@@ -69,9 +72,50 @@ model vendors {
   orders      orders[]
   reviews     reviews[]
   vendor_ratings vendor_ratings[]
+  subscriptions subscriptions[]
 
   @@index([city])
   @@index([is_active])
+}
+
+model subscriptions {
+  id               Int                 @id @default(autoincrement())
+  customer_id      Int
+  vendor_id        Int
+  plan             subscription_plan
+  status           subscription_status @default(active)
+  total_price      Decimal             @db.Decimal(10, 2)
+  remaining_budget Decimal             @db.Decimal(10, 2)
+  start_date       DateTime            @db.Timestamp(0)
+  end_date         DateTime            @db.Timestamp(0)
+  pause_reason     String?             @db.Text
+  created_at       DateTime            @default(now()) @db.Timestamp(0)
+  updated_at       DateTime            @updatedAt @db.Timestamp(0)
+
+  customer         customers           @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  vendor           vendors             @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
+  subscription_orders subscription_orders[]
+
+  @@index([customer_id])
+  @@index([vendor_id])
+  @@index([status])
+  @@index([start_date])
+  @@index([end_date])
+}
+
+model subscription_orders {
+  id              Int           @id @default(autoincrement())
+  subscription_id Int
+  order_id        Int           @unique
+  service_date    DateTime      @db.Timestamp(0)
+  delivery_slot   delivery_slot
+  created_at      DateTime      @default(now()) @db.Timestamp(0)
+
+  subscription    subscriptions @relation(fields: [subscription_id], references: [id], onDelete: Cascade)
+  order           orders         @relation(fields: [order_id], references: [id], onDelete: Cascade)
+
+  @@unique([subscription_id, service_date, delivery_slot])
+  @@index([service_date])
 }
 
 // Menu Categories
@@ -161,6 +205,7 @@ model orders {
   order_items  order_items[]
   payment      payments?
   review       reviews?
+  subscription_order subscription_orders?
 
   @@index([customer_id])
   @@index([vendor_id])
@@ -245,4 +290,21 @@ enum user_role {
   CUSTOMER
   VENDOR
   ADMIN
+}
+
+enum subscription_plan {
+  DAYS_7
+  DAYS_30
+}
+
+enum subscription_status {
+  active
+  paused
+  cancelled
+  completed
+}
+
+enum delivery_slot {
+  MORNING
+  AFTERNOON
 }

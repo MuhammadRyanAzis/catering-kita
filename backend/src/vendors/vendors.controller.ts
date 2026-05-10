@@ -13,6 +13,7 @@ import {
 import { VendorsService } from './vendors.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
+import { UpdateVendorStatusDto } from './dto/update-vendor-status.dto';
 import { QueryVendorDto } from './dto/query-vendor.dto';
 import { CreateVendorRatingDto } from './dto/create-vendor-rating.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -39,6 +40,14 @@ export class VendorsController {
     return this.vendorsService.findVendorOrders(userId);
   }
 
+  // Get all vendors (admin only)
+  @Get('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  findAllAdmin(@Query() query: QueryVendorDto) {
+    return this.vendorsService.findAllAdmin(query);
+  }
+
   // Get vendor detail dengan menus & reviews (public)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
@@ -55,6 +64,17 @@ export class VendorsController {
   ) {
     return this.vendorsService.update(userId, updateVendorDto);
   } 
+
+  // Update vendor status (admin only)
+  @Patch(':id/status')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateVendorStatusDto: UpdateVendorStatusDto,
+  ) {
+    return this.vendorsService.updateStatus(id, updateVendorStatusDto.is_active);
+  }
 
   // Delete own account (vendor)
   @Delete()

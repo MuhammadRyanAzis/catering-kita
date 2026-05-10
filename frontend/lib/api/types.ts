@@ -27,6 +27,8 @@ export interface RegisterVendorDto {
   vendor_city: string;
   vendor_phone: string;
   description?: string;
+  vendor_image_url?: string;
+  vendor_banner_url: string;
 }
 
 export interface LoginDto {
@@ -63,6 +65,7 @@ export interface UserProfile {
     city: string;
     phone: string;
     image_url?: string;
+    banner_url?: string;
     is_active: boolean;
   };
 }
@@ -83,6 +86,8 @@ export interface Menu {
   calories?: number;
   image_url?: string;
   available: boolean;
+  avgRating?: number;
+  totalRatings?: number;
   created_at: string;
   updated_at: string;
   vendor?: Vendor;
@@ -109,12 +114,16 @@ export interface Vendor {
   city: string;
   phone: string;
   image_url?: string;
+  banner_url?: string;
+  subscription_price_7?: number;
+  subscription_price_30?: number;
   is_active: boolean;
   created_at: string;
   updated_at: string;
   menus?: Menu[];
   reviews?: Review[];
   averageRating?: number;
+  totalRatings?: number;
 }
 
 // Order Types

@@ -60,6 +60,8 @@ export class VendorsService {
           phone: vendor.phone,
           image_url: vendor.image_url,
           banner_url: vendor.banner_url,
+          subscription_price_7: vendor.subscription_price_7,
+          subscription_price_30: vendor.subscription_price_30,
           is_active: vendor.is_active,
           created_at: vendor.created_at,
           updated_at: vendor.updated_at,
@@ -75,6 +77,98 @@ export class VendorsService {
     return {
       data: vendorsWithRating,
       total: vendorsWithRating.length,
+    };
+  }
+
+  async findAllAdmin(query: QueryVendorDto) {
+    const { city, minRating } = query;
+
+    const vendors = await this.prisma.vendors.findMany({
+      where: {
+        ...(city && { city }),
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        vendor_ratings: {
+          select: {
+            rating: true,
+          },
+        },
+        _count: {
+          select: {
+            menus: true,
+            orders: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+
+    const vendorsWithRating = vendors
+      .map((vendor) => {
+        const avgRating =
+          vendor.vendor_ratings.length > 0
+            ? vendor.vendor_ratings.reduce((sum, r) => sum + r.rating, 0) / vendor.vendor_ratings.length
+            : 0;
+
+        return {
+          id: vendor.id,
+          user_id: vendor.user_id,
+          name: vendor.name,
+          description: vendor.description,
+          address: vendor.address,
+          city: vendor.city,
+          phone: vendor.phone,
+          image_url: vendor.image_url,
+          banner_url: vendor.banner_url,
+          subscription_price_7: vendor.subscription_price_7,
+          subscription_price_30: vendor.subscription_price_30,
+          is_active: vendor.is_active,
+          created_at: vendor.created_at,
+          updated_at: vendor.updated_at,
+          user: vendor.user,
+          avgRating: Number(avgRating.toFixed(1)),
+          totalRatings: vendor.vendor_ratings.length,
+          totalMenus: vendor._count.menus,
+          totalOrders: vendor._count.orders,
+        };
+      })
+      .filter((vendor) => !minRating || vendor.avgRating >= minRating);
+
+    return {
+      data: vendorsWithRating,
+      total: vendorsWithRating.length,
+    };
+  }
+
+  async updateStatus(id: number, isActive: boolean) {
+    const vendor = await this.prisma.vendors.findUnique({
+      where: { id },
+    });
+
+    if (!vendor) {
+      throw new NotFoundException(`Vendor dengan ID ${id} tidak ditemukan`);
+    }
+
+    const updated = await this.prisma.vendors.update({
+      where: { id },
+      data: { is_active: isActive },
+      include: {
+        user: { select: { id: true, name: true, email: true } },
+      },
+    });
+
+    return {
+      message: `Status vendor berhasil di${updated.is_active ? 'aktifkan' : 'nonaktifkan'}`,
+      data: updated,
     };
   }
 
