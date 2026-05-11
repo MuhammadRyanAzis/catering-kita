@@ -5,9 +5,9 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS so the frontend (port 3000) can reach the backend
+  // Enable CORS so the production frontend can reach the backend
   app.enableCors({
-    origin: ['http://localhost:3000'],
+    origin: ['https://catering-kita1.vercel.app'],
     credentials: true,
   });
 
