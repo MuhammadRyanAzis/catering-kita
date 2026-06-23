@@ -1,8 +1,8 @@
 {
-  "name": "backend",
+  "name": "cateringkita-backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "CateringKita API — Platform Pemesanan Catering Online",
+  "author": "Ryan",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
