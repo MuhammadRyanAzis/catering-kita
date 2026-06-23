@@ -20,6 +20,15 @@ type MenuDetail = {
   description?: string
   price: number | string
   calories?: number
+  carbs?: number
+  protein?: number
+  fat?: number
+  fiber?: number
+  sugar?: number
+  sodium?: number
+  vitamins?: string
+  minerals?: string
+  water?: number
   image_url?: string
   available: boolean
   category?: {
@@ -227,6 +236,70 @@ export default function CustomerMenuDetailPage() {
                       <MapPin className='size-4 text-emerald-500' />
                       <span className='font-medium'>{menu.vendor?.name}</span>
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Nutrition Card */}
+              <Card className='overflow-hidden border-none shadow-md mt-6'>
+                <CardHeader className='pb-3'>
+                  <CardTitle className='text-xl flex items-center gap-2'>
+                    <Utensils className="size-5 text-emerald-600" />
+                    Informasi Kandungan Gizi
+                  </CardTitle>
+                  <CardDescription>
+                    Perkiraan nilai gizi yang terkandung dalam satu porsi menu ini.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col items-center justify-center text-center">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Kalori</p>
+                      <p className="text-lg font-bold text-emerald-700">{menu.calories || 0} <span className="text-xs font-normal">kcal</span></p>
+                    </div>
+                    <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col items-center justify-center text-center">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Karbohidrat</p>
+                      <p className="text-lg font-bold text-emerald-700">{menu.carbs || 0} <span className="text-xs font-normal">g</span></p>
+                    </div>
+                    <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col items-center justify-center text-center">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Protein</p>
+                      <p className="text-lg font-bold text-emerald-700">{menu.protein || 0} <span className="text-xs font-normal">g</span></p>
+                    </div>
+                    <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col items-center justify-center text-center">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Lemak</p>
+                      <p className="text-lg font-bold text-emerald-700">{menu.fat || 0} <span className="text-xs font-normal">g</span></p>
+                    </div>
+                    <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col items-center justify-center text-center">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Serat</p>
+                      <p className="text-lg font-bold text-emerald-700">{menu.fiber || 0} <span className="text-xs font-normal">g</span></p>
+                    </div>
+                    <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col items-center justify-center text-center">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Gula</p>
+                      <p className="text-lg font-bold text-emerald-700">{menu.sugar || 0} <span className="text-xs font-normal">g</span></p>
+                    </div>
+                    <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col items-center justify-center text-center">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Natrium</p>
+                      <p className="text-lg font-bold text-emerald-700">{menu.sodium || 0} <span className="text-xs font-normal">mg</span></p>
+                    </div>
+                    <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col items-center justify-center text-center">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Kadar Air</p>
+                      <p className="text-lg font-bold text-emerald-700">{menu.water || 0} <span className="text-xs font-normal">%</span></p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {menu.vitamins && (
+                      <div className="p-3 bg-blue-50/40 rounded-xl border border-blue-100/50">
+                        <p className="text-[10px] uppercase tracking-wider text-blue-600/70 font-semibold mb-1">Kandungan Vitamin</p>
+                        <p className="text-sm font-medium text-blue-800 leading-snug">{menu.vitamins}</p>
+                      </div>
+                    )}
+                    {menu.minerals && (
+                      <div className="p-3 bg-purple-50/40 rounded-xl border border-purple-100/50">
+                        <p className="text-[10px] uppercase tracking-wider text-purple-600/70 font-semibold mb-1">Kandungan Mineral</p>
+                        <p className="text-sm font-medium text-purple-800 leading-snug">{menu.minerals}</p>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>

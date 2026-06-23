@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { storeCookies } from "@/helper/cookies"
 
 export function SigninForm({ onSwitchToSignin }: { onSwitchToSignin?: () => void }) {
@@ -49,6 +50,10 @@ export function SigninForm({ onSwitchToSignin }: { onSwitchToSignin?: () => void
         localStorage.setItem('token', data.data.access_token)
         localStorage.setItem('user', JSON.stringify(data.data.user))
 
+        toast.success(`Selamat datang kembali, ${data.data.user.name}!`, {
+          description: "Login berhasil, mengalihkan ke dashboard...",
+        });
+
         // Redirect based on role
         if (data.data.user.role === 'CUSTOMER') {
           router.push('/customer/dashboard')
@@ -58,10 +63,17 @@ export function SigninForm({ onSwitchToSignin }: { onSwitchToSignin?: () => void
           router.push('/dashboard')
         }
       } else {
-        setError(data.message || 'Email atau password salah')
+        const errorMsg = data.message || 'Email atau password salah';
+        setError(errorMsg);
+        toast.error('Gagal Masuk', {
+          description: errorMsg,
+        });
       }
     } catch (err) {
-      setError('Terjadi kesalahan, silakan coba lagi')
+      setError('Terjadi kesalahan koneksi jaringan');
+      toast.error('Terjadi Kesalahan', {
+        description: 'Tidak dapat terhubung ke server, silakan coba lagi nanti.',
+      });
     } finally {
       setIsLoading(false)
     }

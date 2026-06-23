@@ -137,6 +137,15 @@ model menus {
   description String?       @db.Text
   price       Decimal       @db.Decimal(10, 2)
   calories    Int?
+  carbs       Float?        // Karbohidrat (g)
+  protein     Float?        // Protein (g)
+  fat         Float?        // Lemak (g)
+  fiber       Float?        // Serat (g)
+  sugar       Float?        // Gula (g)
+  sodium      Float?        // Natrium (mg)
+  vitamins    String?       @db.VarChar(255) // e.g., "Vitamin A, Vitamin C"
+  minerals    String?       @db.VarChar(255) // e.g., "Zat Besi, Kalsium"
+  water       Float?        // Air (%)
   image_url   String?       @db.VarChar(255)
   available   Boolean       @default(true)
   created_at  DateTime      @default(now()) @db.Timestamp(0)

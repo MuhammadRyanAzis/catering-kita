@@ -17,6 +17,7 @@ import {
   Store,
   Tags,
   Users,
+  UtensilsCrossed,
 } from "lucide-react"
 
 import {
@@ -121,39 +122,39 @@ const ROLE_ACCENT: Record<SidebarRole, {
   avatarBg: string
 }> = {
   ADMIN: {
-    brand: "bg-[#533AB7]",
-    activeBg: "bg-[#EEEDFE]",
-    activeText: "text-[#533AB7]",
-    activeBorder: "border-l-[#7F77DD]",
-    avatarBg: "bg-[#7F77DD]",
+    brand: "bg-gradient-to-br from-indigo-500 to-purple-600",
+    activeBg: "bg-indigo-50/80 dark:bg-indigo-500/10",
+    activeText: "text-indigo-600 dark:text-indigo-400",
+    activeBorder: "border-indigo-600 dark:border-indigo-400",
+    avatarBg: "bg-gradient-to-br from-indigo-500 to-purple-600",
   },
   VENDOR: {
-    brand: "bg-[#185FA5]",
-    activeBg: "bg-[#E6F1FB]",
-    activeText: "text-[#185FA5]",
-    activeBorder: "border-l-[#378ADD]",
-    avatarBg: "bg-[#378ADD]",
+    brand: "bg-gradient-to-br from-blue-500 to-cyan-600",
+    activeBg: "bg-blue-50/80 dark:bg-blue-500/10",
+    activeText: "text-blue-600 dark:text-blue-400",
+    activeBorder: "border-blue-600 dark:border-blue-400",
+    avatarBg: "bg-gradient-to-br from-blue-500 to-cyan-600",
   },
   CUSTOMER: {
-    brand: "bg-[#1D9E75]",
-    activeBg: "bg-[#E1F5EE]",
-    activeText: "text-[#0F6E56]",
-    activeBorder: "border-l-[#1D9E75]",
-    avatarBg: "bg-[#1D9E75]",
+    brand: "bg-gradient-to-br from-emerald-500 to-teal-600",
+    activeBg: "bg-emerald-50/80 dark:bg-emerald-500/10",
+    activeText: "text-emerald-600 dark:text-emerald-400",
+    activeBorder: "border-emerald-600 dark:border-emerald-400",
+    avatarBg: "bg-gradient-to-br from-emerald-500 to-teal-600",
   },
   GUEST: {
-    brand: "bg-sidebar-accent",
-    activeBg: "bg-sidebar-accent",
-    activeText: "text-sidebar-accent-foreground",
-    activeBorder: "border-l-sidebar-accent-foreground",
-    avatarBg: "bg-sidebar-accent",
+    brand: "bg-gradient-to-br from-slate-500 to-slate-700",
+    activeBg: "bg-slate-100 dark:bg-slate-800",
+    activeText: "text-slate-800 dark:text-slate-200",
+    activeBorder: "border-slate-800 dark:border-slate-200",
+    avatarBg: "bg-gradient-to-br from-slate-500 to-slate-700",
   },
 }
 
 const ROLE_LABEL: Record<SidebarRole, string> = {
-  ADMIN: "Admin",
-  VENDOR: "Vendor",
-  CUSTOMER: "Customer",
+  ADMIN: "Administrator",
+  VENDOR: "Vendor Partner",
+  CUSTOMER: "Pelanggan Setia",
   GUEST: "Pengunjung",
 }
 
@@ -295,22 +296,25 @@ export function AppSidebar() {
   const accent = ROLE_ACCENT[role]
 
   return (
-    <Sidebar>
+    <Sidebar className="border-r border-border/50 bg-card/40 backdrop-blur-xl">
       {/* ── Header ── */}
-      <SidebarHeader className="p-3 pb-2">
-        <div className={cn(accent.brand, "rounded-xl p-3 text-white")}>
-          <div className="flex items-center gap-2.5">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white/20 text-sm font-semibold">
-              C
+      <SidebarHeader className="p-4 pb-2">
+        <div className={cn(accent.brand, "rounded-2xl p-4 text-white shadow-lg relative overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5")}>
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <UtensilsCrossed className="w-16 h-16 -mr-4 -mt-4 transform rotate-12" />
+          </div>
+          <div className="relative flex items-center gap-3 z-10">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white font-bold shadow-inner backdrop-blur-md border border-white/10">
+              <UtensilsCrossed className="w-5 h-5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <Sparkles className="size-3 text-white/50" />
-                <p className="text-[9px] font-semibold uppercase tracking-widest text-white/50">
+                <Sparkles className="size-3 text-white/70 animate-pulse-glow" />
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/90">
                   CateringKita
                 </p>
               </div>
-              <h2 className="truncate text-[13.5px] font-semibold leading-tight">
+              <h2 className="truncate text-sm font-bold leading-tight mt-0.5 text-white drop-shadow-sm">
                 {ROLE_LABEL[role]}
               </h2>
             </div>
@@ -319,15 +323,15 @@ export function AppSidebar() {
       </SidebarHeader>
 
       {/* ── Nav ── */}
-      <SidebarContent className="px-2 py-1">
+      <SidebarContent className="px-3 py-2 space-y-4">
         {sections.map((section) => (
           <SidebarGroup key={section.label} className="px-0">
-            <SidebarGroupLabel className="px-2 text-[9.5px] font-semibold uppercase tracking-[0.09em] text-sidebar-foreground/35">
+            <SidebarGroupLabel className="px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60 mb-2">
               {section.label}
             </SidebarGroupLabel>
 
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="space-y-1">
                 {section.items.map((item) => {
                   const isActive =
                     !!item.href &&
@@ -342,46 +346,46 @@ export function AppSidebar() {
                           isActive={isActive}
                           tooltip={item.title}
                           className={cn(
-                            "group h-9 rounded-lg text-[13px] font-medium transition-all duration-150",
+                            "group h-10 rounded-xl text-[13px] font-semibold transition-all duration-300",
                             isActive
                               ? cn(
                                   accent.activeBg,
                                   accent.activeText,
                                   accent.activeBorder,
-                                  "border-l-2 rounded-l-none shadow-none"
+                                  "border-l-4 rounded-l-md shadow-sm"
                                 )
                               : item.soon
-                              ? "cursor-default text-sidebar-foreground/30 hover:bg-transparent hover:text-sidebar-foreground/30"
-                              : "text-sidebar-foreground/65 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                              ? "cursor-default text-muted-foreground/40 hover:bg-transparent"
+                              : "text-muted-foreground hover:bg-muted/50 hover:text-foreground hover:translate-x-1"
                           )}
                         >
-                          <Link href={item.soon ? "#" : item.href} tabIndex={item.soon ? -1 : undefined}>
+                          <Link href={item.soon ? "#" : item.href} tabIndex={item.soon ? -1 : undefined} className="flex items-center gap-3 px-3 w-full">
                             <item.icon
                               className={cn(
-                                "size-3.75 shrink-0 transition-opacity",
+                                "size-4 shrink-0 transition-all duration-300",
                                 isActive
-                                  ? "opacity-100"
+                                  ? "opacity-100 scale-110"
                                   : item.soon
-                                  ? "opacity-25"
-                                  : "opacity-45 group-hover:opacity-70"
+                                  ? "opacity-30"
+                                  : "opacity-60 group-hover:opacity-100 group-hover:scale-110"
                               )}
                             />
-                            <span className="truncate">{item.title}</span>
+                            <span className="truncate flex-1">{item.title}</span>
                           </Link>
                         </SidebarMenuButton>
                       ) : (
                         <SidebarMenuButton
                           aria-disabled
                           tooltip={item.title}
-                          className="h-9 cursor-default text-sidebar-foreground/25"
+                          className="h-10 cursor-default text-muted-foreground/40 flex items-center gap-3 px-3"
                         >
-                          <item.icon className="size-3.75 shrink-0 opacity-25" />
+                          <item.icon className="size-4 shrink-0 opacity-30" />
                           <span className="truncate">{item.title}</span>
                         </SidebarMenuButton>
                       )}
 
                       {item.soon && (
-                        <SidebarMenuBadge className="rounded-full border border-border/30 bg-muted/60 px-2 py-0 text-[9px] font-semibold tracking-wide text-muted-foreground/50">
+                        <SidebarMenuBadge className="rounded-full border border-border/40 bg-muted/50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-muted-foreground shadow-sm">
                           Segera
                         </SidebarMenuBadge>
                       )}
@@ -395,53 +399,53 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* ── Footer: User Card ── */}
-      <SidebarFooter className="p-2">
-        <div className="rounded-lg border border-sidebar-border/60 bg-sidebar/40 px-3 py-2">
-          <div className="flex items-center gap-2.5">
+      <SidebarFooter className="p-4">
+        <div className="rounded-2xl border border-border/50 bg-card/60 p-3 shadow-sm backdrop-blur-sm transition-all hover:shadow-md">
+          <div className="flex items-center gap-3">
             <div
               className={cn(
                 accent.avatarBg,
-                "flex size-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-white"
+                "flex size-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold text-white shadow-inner"
               )}
             >
               {user.initials}
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[12px] font-semibold leading-tight text-sidebar-foreground">
+              <p className="truncate text-sm font-bold leading-tight text-foreground">
                 {user.name}
               </p>
               {user.email && (
-                <p className="truncate text-[10.5px] leading-tight text-sidebar-foreground/45">
+                <p className="truncate text-xs leading-tight text-muted-foreground mt-0.5">
                   {user.email}
                 </p>
               )}
             </div>
 
-            <ChevronDown className="size-3.5 shrink-0 text-sidebar-foreground/30" />
+            <ChevronDown className="size-4 shrink-0 text-muted-foreground/50" />
           </div>
 
           {role === "GUEST" ? (
             <button
               type="button"
-              className="mt-2 w-full rounded-md border border-sidebar-border/70 px-2.5 py-1.5 text-[11px] font-semibold text-sidebar-foreground transition-colors hover:bg-sidebar-accent"
+              className="mt-3 w-full rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-md"
               onClick={() => router.push("/signin")}
             >
-              Masuk
+              Masuk / Daftar
             </button>
           ) : (
-            <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="mt-3 grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => void handleSwitchAccount()}
-                className="rounded-md border border-sidebar-border/70 px-2.5 py-1.5 text-[11px] font-semibold text-sidebar-foreground transition-colors hover:bg-sidebar-accent"
+                className="rounded-xl border border-border/60 bg-background/50 px-3 py-2 text-xs font-bold text-muted-foreground transition-all hover:bg-accent hover:text-foreground hover:shadow-sm"
               >
                 Ganti Akun
               </button>
               <button
                 type="button"
                 onClick={() => void handleLogout()}
-                className="rounded-md border border-rose-200/60 px-2.5 py-1.5 text-[11px] font-semibold text-rose-600 transition-colors hover:bg-rose-50"
+                className="rounded-xl bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive transition-all hover:bg-destructive hover:text-destructive-foreground hover:shadow-sm"
               >
                 Logout
               </button>

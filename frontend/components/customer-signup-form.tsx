@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { storeCookies } from '@/helper/cookies'
 
 export function CustomerSignupForm({ onSwitchToSignin, onSwitchToVendor }: { onSwitchToSignin?: () => void; onSwitchToVendor?: () => void }) {
@@ -98,13 +99,20 @@ export function CustomerSignupForm({ onSwitchToSignin, onSwitchToVendor }: { onS
         localStorage.setItem('token', data.data.access_token)
         localStorage.setItem('user', JSON.stringify(data.data.user))
         
+        toast.success(`Berhasil Mendaftar!`, {
+          description: `Selamat datang ${formData.name}, mengalihkan ke dashboard...`,
+        });
+
         // Redirect to dashboard
         router.push('/customer/dashboard')
       } else {
-        setErrors({ submit: data.message || 'Gagal mendaftar' })
+        const errorMsg = data.message || 'Gagal mendaftar';
+        setErrors({ submit: errorMsg })
+        toast.error('Pendaftaran Gagal', { description: errorMsg })
       }
     } catch (error) {
-      setErrors({ submit: 'Terjadi kesalahan, silakan coba lagi' })
+      setErrors({ submit: 'Terjadi kesalahan koneksi jaringan' })
+      toast.error('Terjadi Kesalahan', { description: 'Tidak dapat terhubung ke server.' })
     } finally {
       setIsLoading(false)
     }

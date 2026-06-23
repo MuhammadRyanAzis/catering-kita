@@ -32,6 +32,51 @@ export class CreateMenuDto {
   image_url?: string;
 
   @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  carbs?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  protein?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  fat?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  fiber?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  sugar?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  sodium?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  water?: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  vitamins?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  minerals?: string;
+
+  @IsOptional()
   @IsBoolean()
   available?: boolean;
 }
