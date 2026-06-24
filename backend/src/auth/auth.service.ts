@@ -5,8 +5,8 @@ import {
   BadRequestException 
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { BcryptService } from 'src/bcrypt/bcrypt.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { BcryptService } from '../bcrypt/bcrypt.service';
 import { LoginDto } from './dto/login.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { RegisterDto, UserRole } from './dto/register.dto';
