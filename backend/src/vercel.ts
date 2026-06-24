@@ -60,7 +60,7 @@ async function bootstrap() {
   return cachedApp;
 }
 
-export default async (req: any, res: any) => {
+const handler = async (req: any, res: any) => {
   await bootstrap();
   if (bootError) {
     return res.status(500).json({
@@ -72,3 +72,5 @@ export default async (req: any, res: any) => {
   }
   server(req, res);
 };
+
+export = handler;
